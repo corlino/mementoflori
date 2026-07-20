@@ -85,12 +85,14 @@
     letter-spacing: 0.04em;
     text-decoration: none;
     display: flex;
-    align-items: baseline;
-    gap: 8px;
+    align-items: center;
+    gap: 10px;
   }
-  .wordmark .glyph{
-    font-size: 15px;
-    color: var(--stone-dim);
+  .wordmark-logo{
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    flex: 0 0 auto;
   }
   nav.links{
     display: flex;
@@ -450,7 +452,7 @@
 <div class="grain"></div>
 
 <header class="site">
-  <a href="#top" class="wordmark"><span class="glyph">✦</span> Memento Flori</a>
+  <a href="#top" class="wordmark"><img class="wordmark-logo" src="public/MF%20Logo.png" alt="" aria-hidden="true"> Memento Flori</a>
   <nav class="links">
     <a href="#grounds">Grounds</a>
     <a href="#process">Process</a>
@@ -620,7 +622,7 @@
 </main>
 
 <footer>
-  <a href="#top" class="wordmark"><span class="glyph">✦</span> Memento Flori</a>
+  <a href="#top" class="wordmark"><img class="wordmark-logo" src="public/MF%20Logo.png" alt="" aria-hidden="true"> Memento Flori</a>
   <p>Burnaby &amp; Vancouver, British Columbia</p>
 </footer>
 
