@@ -282,16 +282,25 @@
     .ledger-head{ display: none; }
   }
 
-  /* ---------- quote ---------- */
-  .quote-section{
-    padding: 150px 0;
-    text-align: center;
-    background: var(--bg-raised);
-    border-top: 1px solid var(--line-soft);
-    border-bottom: 1px solid var(--line-soft);
-    position: relative;
+  /* ---------- intro ---------- */
+  .intro-veil{
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    padding: 32px;
+    background:
+      radial-gradient(ellipse 60% 44% at 50% 42%, rgba(239,236,227,0.06), transparent 72%),
+      var(--bg);
+    opacity: 0;
+    pointer-events: none;
   }
-  blockquote{
+  .intro-veil.show{
+    animation: introDissolve 3s ease forwards;
+    pointer-events: auto;
+  }
+  .intro-quote{
     margin: 0 auto;
     max-width: 30ch;
     font-family: 'Fraunces', serif;
@@ -300,19 +309,35 @@
     font-size: clamp(26px, 4vw, 40px);
     line-height: 1.45;
     color: var(--stone);
-    padding: 0 32px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(8px);
   }
-  blockquote::before{ content: "“"; }
-  blockquote::after{ content: "”"; }
-  .quote-attr{
-    margin-top: 30px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--ink-faint);
+  .intro-veil.show .intro-quote{
+    animation: introQuote 3s ease forwards;
   }
-  .quote-attr::before{ content: "— "; }
+  .intro-quote::before{ content: "“"; }
+  .intro-quote::after{ content: "”"; }
+  @keyframes introDissolve{
+    0%{ opacity: 1; }
+    12%{ opacity: 1; }
+    68%{ opacity: 1; }
+    100%{ opacity: 0; visibility: hidden; }
+  }
+  @keyframes introQuote{
+    0%{ opacity: 0; transform: translateY(8px); }
+    18%{ opacity: 1; transform: translateY(0); }
+    68%{ opacity: 1; transform: translateY(0); }
+    100%{ opacity: 0; transform: translateY(-6px); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .intro-veil.show{
+      animation-duration: 0.7s;
+    }
+    .intro-veil.show .intro-quote{
+      animation-duration: 0.7s;
+    }
+  }
 
   /* ---------- steps ---------- */
   .steps{
@@ -449,6 +474,10 @@
 </head>
 <body>
 
+<div class="intro-veil" id="introVeil" aria-hidden="true">
+  <p class="intro-quote">Every person has two deaths: when they are buried, and the last time someone says their name.</p>
+</div>
+
 <div class="grain"></div>
 
 <header class="site">
@@ -517,13 +546,6 @@
         </div>
       </div>
       <p class="ledger-foot">Don't see your cemetery listed? Mention it in your request below — we're expanding across Metro Vancouver on a rolling basis.</p>
-    </div>
-  </section>
-
-  <section class="quote-section">
-    <div class="wrap reveal">
-      <blockquote>Every man has two deaths, when he is buried in the ground and the last time someone says his name</blockquote>
-      <p class="quote-attr">Ernest Hemingway</p>
     </div>
   </section>
 
@@ -627,6 +649,20 @@
 </footer>
 
 <script>
+  // intro quote, once per browser session
+  const introVeil = document.getElementById('introVeil');
+  if(!sessionStorage.getItem('mementoIntroSeen')){
+    introVeil.classList.add('show');
+    sessionStorage.setItem('mementoIntroSeen', 'true');
+    introVeil.addEventListener('animationend', function(e){
+      if(e.animationName === 'introDissolve'){
+        introVeil.remove();
+      }
+    });
+  } else {
+    introVeil.remove();
+  }
+
   // scroll reveal
   const revealEls = document.querySelectorAll('.reveal');
   const io = new IntersectionObserver((entries) => {
