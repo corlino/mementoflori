@@ -1,686 +1,899 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Memento Flori — Memorial Flower Placement, Burnaby &amp; Vancouver</title>
-<meta name="description" content="Memento Flori places fresh flowers at headstones across Burnaby and Vancouver, so remembrance reaches the grave even when you cannot.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,ital@9..144,300,340,400,440;9..144,1,340&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg: #0a0a09;
-    --bg-raised: #131311;
-    --bg-raised-2: #171613;
-    --ink: #efece3;
-    --ink-dim: #9b968a;
-    --ink-faint: #5c584d;
-    --line: #29271f;
-    --line-soft: #1c1a15;
-    --stone: #d1cdbf;
-    --stone-dim: #8a8574;
-    --focus: #efece3;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memento Flori — Memorial Flower Placement, Burnaby &amp; Vancouver</title>
+    <meta name="description" content="Memento Flori places fresh flowers at headstones across Burnaby and Vancouver, so remembrance reaches the grave even when you cannot.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,ital@9..144,300,340,400,440;9..144,1,340&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a09;
+            --bg-raised: #131311;
+            --bg-raised-2: #171613;
+            --ink: #efece3;
+            --ink-dim: #9b968a;
+            --ink-faint: #5c584d;
+            --line: #29271f;
+            --line-soft: #1c1a15;
+            --stone: #d1cdbf;
+            --stone-dim: #8a8574;
+            --focus: #efece3;
+        }
 
-  *{ box-sizing: border-box; }
-  html{ scroll-behavior: smooth; }
-  @media (prefers-reduced-motion: reduce){
-    html{ scroll-behavior: auto; }
-    *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
-  }
+        * {
+            box-sizing: border-box;
+        }
 
-  body{
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: 'Inter', sans-serif;
-    font-size: 16px;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-  }
+        html {
+            scroll-behavior: smooth;
+        }
 
-  ::selection{ background: var(--stone); color: #0a0a09; }
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
 
-  a{ color: inherit; }
+            * {
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.001ms !important;
+            }
+        }
 
-  :focus-visible{
-    outline: 1px solid var(--focus);
-    outline-offset: 4px;
-  }
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--ink);
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
 
-  .wrap{
-    max-width: 1080px;
-    margin: 0 auto;
-    padding: 0 32px;
-  }
+        ::selection {
+            background: var(--stone);
+            color: #0a0a09;
+        }
 
-  /* ---------- texture ---------- */
-  .grain{
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 50;
-    opacity: 0.05;
-    mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
+        a {
+            color: inherit;
+        }
 
-  /* ---------- nav ---------- */
-  header.site{
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 40;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 22px 32px;
-    background: linear-gradient(to bottom, rgba(10,10,9,0.92), rgba(10,10,9,0));
-    backdrop-filter: blur(2px);
-  }
-  .wordmark{
-    font-family: 'Fraunces', serif;
-    font-weight: 400;
-    font-size: 18px;
-    letter-spacing: 0.04em;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .wordmark-logo{
-    width: 24px;
-    height: 24px;
-    object-fit: contain;
-    flex: 0 0 auto;
-  }
-  nav.links{
-    display: flex;
-    gap: 28px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-  nav.links a{
-    text-decoration: none;
-    color: var(--ink-dim);
-    border-bottom: 1px solid transparent;
-    padding-bottom: 3px;
-    transition: color 0.25s ease, border-color 0.25s ease;
-  }
-  nav.links a:hover{ color: var(--ink); border-color: var(--ink-faint); }
-  @media (max-width: 640px){ nav.links{ display: none; } }
+        :focus-visible {
+            outline: 1px solid var(--focus);
+            outline-offset: 4px;
+        }
 
-  /* ---------- hero ---------- */
-  .hero{
-    min-height: 100svh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 160px 32px 100px;
-    position: relative;
-    background:
-      radial-gradient(ellipse 60% 45% at 50% 38%, rgba(239,236,227,0.05), transparent 70%),
-      var(--bg);
-  }
-  .hero::after{
-    content: "";
-    position: absolute;
-    left: 50%; bottom: 64px;
-    transform: translateX(-50%);
-    width: 1px; height: 46px;
-    background: linear-gradient(to bottom, var(--ink-faint), transparent);
-  }
-  .eyebrow{
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: var(--stone-dim);
-    margin: 0 0 26px;
-  }
-  .eyebrow::before{ content: "✦  "; }
-  .eyebrow::after{ content: "  ✦"; }
-  h1.hero-title{
-    font-family: 'Fraunces', serif;
-    font-weight: 340;
-    font-size: clamp(40px, 7vw, 78px);
-    line-height: 1.08;
-    letter-spacing: -0.01em;
-    margin: 0 0 28px;
-    max-width: 15ch;
-    text-shadow: 0 1px 0 rgba(255,255,255,0.04), 0 -1px 1px rgba(0,0,0,0.6);
-  }
-  h1.hero-title em{
-    font-style: italic;
-    color: var(--stone);
-    font-weight: 340;
-  }
-  .hero-sub{
-    max-width: 46ch;
-    color: var(--ink-dim);
-    font-size: 17px;
-    margin: 0 0 44px;
-  }
-  .hero-actions{
-    display: flex;
-    gap: 18px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  .btn{
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    text-decoration: none;
-    padding: 15px 30px;
-    border: 1px solid var(--ink);
-    color: var(--ink);
-    background: transparent;
-    cursor: pointer;
-    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
-    display: inline-block;
-  }
-  .btn:hover{ background: var(--ink); color: var(--bg); }
-  .btn.ghost{
-    border-color: var(--line);
-    color: var(--ink-dim);
-  }
-  .btn.ghost:hover{ background: transparent; color: var(--ink); border-color: var(--ink-faint); }
+        .wrap {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
 
-  /* ---------- section shell ---------- */
-  section{ padding: 120px 0; border-top: 1px solid var(--line-soft); }
-  .section-head{ margin-bottom: 64px; max-width: 62ch; }
-  .kicker{
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--stone-dim);
-    margin: 0 0 18px;
-  }
-  h2.carved{
-    font-family: 'Fraunces', serif;
-    font-weight: 360;
-    font-size: clamp(28px, 4vw, 42px);
-    line-height: 1.2;
-    margin: 0 0 18px;
-    color: var(--ink);
-    text-shadow: 0 1px 0 rgba(255,255,255,0.05), 0 -1px 0 rgba(0,0,0,0.7);
-  }
-  .section-head p{ color: var(--ink-dim); font-size: 16px; margin: 0; }
+        /* ---------- texture ---------- */
+        .grain {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.05;
+            mix-blend-mode: overlay;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
 
-  /* ---------- status ledger ---------- */
-  .ledger{
-    border-top: 1px solid var(--line);
-  }
-  .ledger-row{
-    display: grid;
-    grid-template-columns: 1.6fr 1fr 1fr auto;
-    align-items: center;
-    gap: 20px;
-    padding: 26px 0;
-    border-bottom: 1px solid var(--line);
-  }
-  .ledger-head{
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--ink-faint);
-    padding-bottom: 14px;
-  }
-  .ledger-name{
-    font-family: 'Fraunces', serif;
-    font-size: 20px;
-    font-weight: 400;
-    color: var(--ink);
-  }
-  .ledger-locale, .ledger-lead{
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 13px;
-    color: var(--ink-dim);
-  }
-  .status{
-    display: inline-flex;
-    align-items: center;
-    gap: 9px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    justify-self: end;
-    white-space: nowrap;
-  }
-  .dot{
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-  .status.open .dot{ background: var(--stone); box-shadow: 0 0 0 3px rgba(209,205,191,0.12); animation: pulse 3.2s ease-in-out infinite; }
-  .status.limited .dot{ background: var(--ink-dim); }
-  .status.soon .dot{ background: var(--ink-faint); border: 1px solid var(--ink-faint); }
-  .status.open{ color: var(--stone); }
-  .status.limited{ color: var(--ink-dim); }
-  .status.soon{ color: var(--ink-faint); }
-  @keyframes pulse{
-    0%, 100%{ box-shadow: 0 0 0 3px rgba(209,205,191,0.12); }
-    50%{ box-shadow: 0 0 0 6px rgba(209,205,191,0.05); }
-  }
-  .ledger-foot{
-    margin-top: 28px;
-    font-size: 14px;
-    color: var(--ink-faint);
-  }
-  @media (max-width: 720px){
-    .ledger-row{ grid-template-columns: 1fr; gap: 6px; padding: 22px 0; }
-    .status{ justify-self: start; margin-top: 6px; }
-    .ledger-head{ display: none; }
-  }
+        /* ---------- nav ---------- */
+        header.site {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 40;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 22px 32px;
+            background: linear-gradient(to bottom, rgba(10,10,9,0.92), rgba(10,10,9,0));
+            backdrop-filter: blur(2px);
+        }
 
-  /* ---------- intro ---------- */
-  .intro-veil{
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    display: grid;
-    place-items: center;
-    padding: 32px;
-    background:
-      radial-gradient(ellipse 60% 44% at 50% 42%, rgba(239,236,227,0.06), transparent 72%),
-      var(--bg);
-    opacity: 0;
-    pointer-events: none;
-  }
-  .intro-veil.show{
-    animation: introDissolve 3s ease forwards;
-    pointer-events: auto;
-  }
-  .intro-quote{
-    margin: 0 auto;
-    max-width: 30ch;
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-weight: 340;
-    font-size: clamp(26px, 4vw, 40px);
-    line-height: 1.45;
-    color: var(--stone);
-    text-align: center;
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  .intro-veil.show .intro-quote{
-    animation: introQuote 3s ease forwards;
-  }
-  .intro-quote::before{ content: "“"; }
-  .intro-quote::after{ content: "”"; }
-  @keyframes introDissolve{
-    0%{ opacity: 1; }
-    12%{ opacity: 1; }
-    68%{ opacity: 1; }
-    100%{ opacity: 0; visibility: hidden; }
-  }
-  @keyframes introQuote{
-    0%{ opacity: 0; transform: translateY(8px); }
-    18%{ opacity: 1; transform: translateY(0); }
-    68%{ opacity: 1; transform: translateY(0); }
-    100%{ opacity: 0; transform: translateY(-6px); }
-  }
-  @media (prefers-reduced-motion: reduce){
-    .intro-veil.show{
-      animation-duration: 0.7s;
-    }
-    .intro-veil.show .intro-quote{
-      animation-duration: 0.7s;
-    }
-  }
+        .wordmark {
+            font-family: 'Fraunces', serif;
+            font-weight: 400;
+            font-size: 18px;
+            letter-spacing: 0.04em;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-  /* ---------- steps ---------- */
-  .steps{
-    counter-reset: step;
-    border-top: 1px solid var(--line);
-  }
-  .step{
-    counter-increment: step;
-    display: grid;
-    grid-template-columns: 90px 1fr;
-    gap: 28px;
-    padding: 44px 0;
-    border-bottom: 1px solid var(--line);
-    position: relative;
-  }
-  .step-num{
-    font-family: 'Fraunces', serif;
-    font-weight: 300;
-    font-style: italic;
-    font-size: 44px;
-    color: var(--ink-faint);
-    line-height: 1;
-  }
-  .step-body h3{
-    font-family: 'Fraunces', serif;
-    font-weight: 400;
-    font-size: 22px;
-    margin: 4px 0 10px;
-    color: var(--ink);
-  }
-  .step-body p{
-    margin: 0;
-    color: var(--ink-dim);
-    max-width: 56ch;
-    font-size: 15.5px;
-  }
-  @media (max-width: 640px){
-    .step{ grid-template-columns: 50px 1fr; gap: 18px; padding: 34px 0; }
-    .step-num{ font-size: 32px; }
-  }
+        .wordmark-logo {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+            flex: 0 0 auto;
+        }
 
-  /* ---------- form ---------- */
-  .form-section{ background: var(--bg-raised-2); border-top: 1px solid var(--line-soft); }
-  form{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px 40px;
-    max-width: 760px;
-  }
-  .field{ display: flex; flex-direction: column; gap: 10px; }
-  .field.full{ grid-column: 1 / -1; }
-  label{
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--ink-faint);
-  }
-  input, select{
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid var(--line);
-    color: var(--ink);
-    font-family: 'Inter', sans-serif;
-    font-size: 16px;
-    padding: 10px 2px;
-    transition: border-color 0.25s ease;
-    appearance: none;
-    -webkit-appearance: none;
-    border-radius: 0;
-  }
-  select{
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%239b968a'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 4px center;
-    padding-right: 20px;
-  }
-  select option{ background: var(--bg-raised-2); color: var(--ink); }
-  input::placeholder{ color: var(--ink-faint); }
-  input:focus, select:focus{ border-color: var(--stone); outline: none; }
-  input:focus-visible, select:focus-visible{ outline: none; border-color: var(--stone); }
+        nav.links {
+            display: flex;
+            gap: 28px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
 
-  .form-foot{
-    grid-column: 1 / -1;
-    margin-top: 12px;
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    flex-wrap: wrap;
-  }
-  .form-note{
-    font-size: 13px;
-    color: var(--ink-faint);
-    max-width: 40ch;
-  }
-  @media (max-width: 640px){
-    form{ grid-template-columns: 1fr; }
-  }
+            nav.links a {
+                text-decoration: none;
+                color: var(--ink-dim);
+                border-bottom: 1px solid transparent;
+                padding-bottom: 3px;
+                transition: color 0.25s ease, border-color 0.25s ease;
+            }
 
-  .confirm{
-    display: none;
-    padding: 50px 0 10px;
-    max-width: 46ch;
-  }
-  .confirm.show{ display: block; }
-  .confirm h3{
-    font-family: 'Fraunces', serif;
-    font-weight: 400;
-    font-size: 24px;
-    margin: 0 0 10px;
-  }
-  .confirm p{ color: var(--ink-dim); margin: 0; }
+                nav.links a:hover {
+                    color: var(--ink);
+                    border-color: var(--ink-faint);
+                }
 
-  /* ---------- footer ---------- */
-  footer{
-    padding: 60px 32px 40px;
-    text-align: center;
-  }
-  footer .wordmark{ justify-content: center; margin-bottom: 14px; }
-  footer p{
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    color: var(--ink-faint);
-    letter-spacing: 0.05em;
-  }
+        @media (max-width: 640px) {
+            nav.links {
+                display: none;
+            }
+        }
 
-  .reveal{
-    opacity: 0;
-    transform: translateY(18px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-  }
-  .reveal.in{ opacity: 1; transform: translateY(0); }
-</style>
+        /* ---------- hero ---------- */
+        .hero {
+            min-height: 100svh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 160px 32px 100px;
+            position: relative;
+            background: radial-gradient(ellipse 60% 45% at 50% 38%, rgba(239,236,227,0.05), transparent 70%), var(--bg);
+        }
+
+            .hero::after {
+                content: "";
+                position: absolute;
+                left: 50%;
+                bottom: 64px;
+                transform: translateX(-50%);
+                width: 1px;
+                height: 46px;
+                background: linear-gradient(to bottom, var(--ink-faint), transparent);
+            }
+
+        .eyebrow {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: var(--stone-dim);
+            margin: 0 0 26px;
+        }
+
+            .eyebrow::before {
+                content: "✦  ";
+            }
+
+            .eyebrow::after {
+                content: "  ✦";
+            }
+
+        h1.hero-title {
+            font-family: 'Fraunces', serif;
+            font-weight: 340;
+            font-size: clamp(40px, 7vw, 78px);
+            line-height: 1.08;
+            letter-spacing: -0.01em;
+            margin: 0 0 28px;
+            max-width: 15ch;
+            text-shadow: 0 1px 0 rgba(255,255,255,0.04), 0 -1px 1px rgba(0,0,0,0.6);
+        }
+
+            h1.hero-title em {
+                font-style: italic;
+                color: var(--stone);
+                font-weight: 340;
+            }
+
+        .hero-sub {
+            max-width: 46ch;
+            color: var(--ink-dim);
+            font-size: 17px;
+            margin: 0 0 44px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-decoration: none;
+            padding: 15px 30px;
+            border: 1px solid var(--ink);
+            color: var(--ink);
+            background: transparent;
+            cursor: pointer;
+            transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+            display: inline-block;
+        }
+
+            .btn:hover {
+                background: var(--ink);
+                color: var(--bg);
+            }
+
+            .btn.ghost {
+                border-color: var(--line);
+                color: var(--ink-dim);
+            }
+
+                .btn.ghost:hover {
+                    background: transparent;
+                    color: var(--ink);
+                    border-color: var(--ink-faint);
+                }
+
+        /* ---------- section shell ---------- */
+        section {
+            padding: 120px 0;
+            border-top: 1px solid var(--line-soft);
+        }
+
+        .section-head {
+            margin-bottom: 64px;
+            max-width: 62ch;
+        }
+
+        .kicker {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--stone-dim);
+            margin: 0 0 18px;
+        }
+
+        h2.carved {
+            font-family: 'Fraunces', serif;
+            font-weight: 360;
+            font-size: clamp(28px, 4vw, 42px);
+            line-height: 1.2;
+            margin: 0 0 18px;
+            color: var(--ink);
+            text-shadow: 0 1px 0 rgba(255,255,255,0.05), 0 -1px 0 rgba(0,0,0,0.7);
+        }
+
+        .section-head p {
+            color: var(--ink-dim);
+            font-size: 16px;
+            margin: 0;
+        }
+
+        /* ---------- status ledger ---------- */
+        .ledger {
+            border-top: 1px solid var(--line);
+        }
+
+        .ledger-row {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr 1fr auto;
+            align-items: center;
+            gap: 20px;
+            padding: 26px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .ledger-head {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--ink-faint);
+            padding-bottom: 14px;
+        }
+
+        .ledger-name {
+            font-family: 'Fraunces', serif;
+            font-size: 20px;
+            font-weight: 400;
+            color: var(--ink);
+        }
+
+        .ledger-locale, .ledger-lead {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 13px;
+            color: var(--ink-dim);
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            justify-self: end;
+            white-space: nowrap;
+        }
+
+        .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .status.open .dot {
+            background: var(--stone);
+            box-shadow: 0 0 0 3px rgba(209,205,191,0.12);
+            animation: pulse 3.2s ease-in-out infinite;
+        }
+
+        .status.limited .dot {
+            background: var(--ink-dim);
+        }
+
+        .status.soon .dot {
+            background: var(--ink-faint);
+            border: 1px solid var(--ink-faint);
+        }
+
+        .status.open {
+            color: var(--stone);
+        }
+
+        .status.limited {
+            color: var(--ink-dim);
+        }
+
+        .status.soon {
+            color: var(--ink-faint);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 3px rgba(209,205,191,0.12);
+            }
+
+            50% {
+                box-shadow: 0 0 0 6px rgba(209,205,191,0.05);
+            }
+        }
+
+        .ledger-foot {
+            margin-top: 28px;
+            font-size: 14px;
+            color: var(--ink-faint);
+        }
+
+        @media (max-width: 720px) {
+            .ledger-row {
+                grid-template-columns: 1fr;
+                gap: 6px;
+                padding: 22px 0;
+            }
+
+            .status {
+                justify-self: start;
+                margin-top: 6px;
+            }
+
+            .ledger-head {
+                display: none;
+            }
+        }
+
+        /* ---------- intro ---------- */
+        .intro-veil {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: grid;
+            place-items: center;
+            padding: 32px;
+            background: radial-gradient(ellipse 60% 44% at 50% 42%, rgba(239,236,227,0.06), transparent 72%), var(--bg);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+            .intro-veil.show {
+                animation: introDissolve 3s ease forwards;
+                pointer-events: auto;
+            }
+
+        .intro-quote {
+            margin: 0 auto;
+            max-width: 30ch;
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            font-weight: 340;
+            font-size: clamp(26px, 4vw, 40px);
+            line-height: 1.45;
+            color: var(--stone);
+            text-align: center;
+            opacity: 0;
+            transform: translateY(8px);
+        }
+
+        .intro-veil.show .intro-quote {
+            animation: introQuote 3s ease forwards;
+        }
+
+        .intro-quote::before {
+            content: "“";
+        }
+
+        .intro-quote::after {
+            content: "”";
+        }
+
+        @keyframes introDissolve {
+            0% {
+                opacity: 1;
+            }
+
+            12% {
+                opacity: 1;
+            }
+
+            68% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        @keyframes introQuote {
+            0% {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            18% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            68% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-6px);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .intro-veil.show {
+                animation-duration: 0.7s;
+            }
+
+                .intro-veil.show .intro-quote {
+                    animation-duration: 0.7s;
+                }
+        }
+
+        /* ---------- steps ---------- */
+        .steps {
+            counter-reset: step;
+            border-top: 1px solid var(--line);
+        }
+
+        .step {
+            counter-increment: step;
+            display: grid;
+            grid-template-columns: 90px 1fr;
+            gap: 28px;
+            padding: 44px 0;
+            border-bottom: 1px solid var(--line);
+            position: relative;
+        }
+
+        .step-num {
+            font-family: 'Fraunces', serif;
+            font-weight: 300;
+            font-style: italic;
+            font-size: 44px;
+            color: var(--ink-faint);
+            line-height: 1;
+        }
+
+        .step-body h3 {
+            font-family: 'Fraunces', serif;
+            font-weight: 400;
+            font-size: 22px;
+            margin: 4px 0 10px;
+            color: var(--ink);
+        }
+
+        .step-body p {
+            margin: 0;
+            color: var(--ink-dim);
+            max-width: 56ch;
+            font-size: 15.5px;
+        }
+
+        @media (max-width: 640px) {
+            .step {
+                grid-template-columns: 50px 1fr;
+                gap: 18px;
+                padding: 34px 0;
+            }
+
+            .step-num {
+                font-size: 32px;
+            }
+        }
+
+        /* ---------- form ---------- */
+        .form-section {
+            background: var(--bg-raised-2);
+            border-top: 1px solid var(--line-soft);
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px 40px;
+            max-width: 760px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+            .field.full {
+                grid-column: 1 / -1;
+            }
+
+        label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--ink-faint);
+        }
+
+        input, select {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--line);
+            color: var(--ink);
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            padding: 10px 2px;
+            transition: border-color 0.25s ease;
+            appearance: none;
+            -webkit-appearance: none;
+            border-radius: 0;
+        }
+
+        select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%239b968a'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 4px center;
+            padding-right: 20px;
+        }
+
+            select option {
+                background: var(--bg-raised-2);
+                color: var(--ink);
+            }
+
+        input::placeholder {
+            color: var(--ink-faint);
+        }
+
+        input:focus, select:focus {
+            border-color: var(--stone);
+            outline: none;
+        }
+
+        input:focus-visible, select:focus-visible {
+            outline: none;
+            border-color: var(--stone);
+        }
+
+        .form-foot {
+            grid-column: 1 / -1;
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .form-note {
+            font-size: 13px;
+            color: var(--ink-faint);
+            max-width: 40ch;
+        }
+
+        @media (max-width: 640px) {
+            form {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .confirm {
+            display: none;
+            padding: 50px 0 10px;
+            max-width: 46ch;
+        }
+
+            .confirm.show {
+                display: block;
+            }
+
+            .confirm h3 {
+                font-family: 'Fraunces', serif;
+                font-weight: 400;
+                font-size: 24px;
+                margin: 0 0 10px;
+            }
+
+            .confirm p {
+                color: var(--ink-dim);
+                margin: 0;
+            }
+
+        /* ---------- footer ---------- */
+        footer {
+            padding: 60px 32px 40px;
+            text-align: center;
+        }
+
+            footer .wordmark {
+                justify-content: center;
+                margin-bottom: 14px;
+            }
+
+            footer p {
+                font-family: 'IBM Plex Mono', monospace;
+                font-size: 11px;
+                color: var(--ink-faint);
+                letter-spacing: 0.05em;
+            }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(18px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+            .reveal.in {
+                opacity: 1;
+                transform: translateY(0);
+            }
+    </style>
 </head>
 <body>
 
-<div class="intro-veil" id="introVeil" aria-hidden="true">
-  <p class="intro-quote">Every person has two deaths: when they are buried, and the last time someone says their name.</p>
-</div>
-
-<div class="grain"></div>
-
-<header class="site">
-  <a href="#top" class="wordmark"><img class="wordmark-logo" src="MF%20Logo.png" alt="" aria-hidden="true"> Memento Flori</a>
-  <nav class="links">
-    <a href="#grounds">Grounds</a>
-    <a href="#process">Process</a>
-    <a href="#request">Request</a>
-  </nav>
-</header>
-
-<main id="top">
-
-  <section class="hero">
-    <p class="eyebrow">Memorial Flower Placement</p>
-    <h1 class="hero-title">Remembrance, carried <em>to the grave.</em></h1>
-    <p class="hero-sub">We place fresh flowers at the headstones of loved ones across Burnaby and Vancouver, on the birthdays, anniversaries, and holidays you cannot be there for in person.</p>
-    <div class="hero-actions">
-      <a href="#request" class="btn">Request a Placement</a>
-      <a href="#grounds" class="btn ghost">See Grounds We Serve</a>
+    <div class="intro-veil" id="introVeil" aria-hidden="true">
+        <p class="intro-quote">Every person has two deaths: when they are buried, and the last time someone says their name.</p>
     </div>
-  </section>
 
-  <section id="grounds">
-    <div class="wrap reveal">
-      <div class="section-head">
-        <p class="kicker">Coverage</p>
-        <h2 class="carved">Grounds we serve</h2>
-        <p>We begin close to home. Below is our current standing at each location — where we're fully available, where demand runs high, and where we're preparing to expand next.</p>
-      </div>
+    <div class="grain"></div>
 
-      <div class="ledger">
-        <div class="ledger-row ledger-head">
-          <span>Location</span>
-          <span>Municipality</span>
-          <span>Typical Lead Time</span>
-          <span>Status</span>
-        </div>
+    <header class="site">
+        <a href="#top" class="wordmark"><img class="wordmark-logo" src="MF%20Logo.png" alt="" aria-hidden="true"> Memento Flori</a>
+        <nav class="links">
+            <a href="#grounds">Grounds</a>
+            <a href="#process">Process</a>
+            <a href="#request">Request</a>
+        </nav>
+    </header>
 
-        <div class="ledger-row">
-          <span class="ledger-name">Forest Lawn Memorial Park</span>
-          <span class="ledger-locale">Burnaby, BC</span>
-          <span class="ledger-lead">2–3 days</span>
-          <span class="status open"><span class="dot"></span>Open</span>
-        </div>
+    <main id="top">
 
-        <div class="ledger-row">
-          <span class="ledger-name">Ocean View Burial Park</span>
-          <span class="ledger-locale">Burnaby, BC</span>
-          <span class="ledger-lead">2–3 days</span>
-          <span class="status open"><span class="dot"></span>Open</span>
-        </div>
+        <section class="hero">
+            <p class="eyebrow">Memorial Flower Placement</p>
+            <h1 class="hero-title">Remembrance, carried <em>to the grave.</em></h1>
+            <p class="hero-sub">We place fresh flowers at the headstones of loved ones across Burnaby and Vancouver, on the birthdays, anniversaries, and holidays you cannot be there for in person.</p>
+            <div class="hero-actions">
+                <a href="#request" class="btn">Request a Placement</a>
+                <a href="#grounds" class="btn ghost">See Grounds We Serve</a>
+            </div>
+        </section>
 
-        <div class="ledger-row">
-          <span class="ledger-name">Mountain View Cemetery</span>
-          <span class="ledger-locale">Vancouver, BC</span>
-          <span class="ledger-lead">4–5 days</span>
-          <span class="status limited"><span class="dot"></span>Limited capacity</span>
-        </div>
+        <section id="grounds">
+            <div class="wrap reveal">
+                <div class="section-head">
+                    <h2 class="carved">Grounds we serve</h2>
+                    <p>We begin close to home. Below is our current standing at each location — where we're fully available, where demand runs high, and where we're preparing to expand next.</p>
+                </div>
 
-        <div class="ledger-row">
-          <span class="ledger-name">Fraser Cemetery</span>
-          <span class="ledger-locale">New Westminster, BC</span>
-          <span class="ledger-lead">—</span>
-          <span class="status soon"><span class="dot"></span>Opening soon</span>
-        </div>
-      </div>
-      <p class="ledger-foot">Don't see your cemetery listed? Mention it in your request below — we're expanding across Metro Vancouver on a rolling basis.</p>
-    </div>
-  </section>
+                <div class="ledger">
+                    <div class="ledger-row ledger-head">
+                        <span>Location</span>
+                        <span>Municipality</span>
+                        <span>Typical Lead Time</span>
+                        <span>Status</span>
+                    </div>
 
-  <section id="process">
-    <div class="wrap reveal">
-      <div class="section-head">
-        <p class="kicker">How it works</p>
-        <h2 class="carved">A simple, guided process</h2>
-        <p>From the moment you reach out to the moment you see the flowers in place, every step is handled with the same care we'd want shown at the graveside of our own family.</p>
-      </div>
+                    <div class="ledger-row">
+                        <span class="ledger-name">Forest Lawn Memorial Park</span>
+                        <span class="ledger-locale">Burnaby, BC</span>
+                        <span class="ledger-lead">2–3 days</span>
+                        <span class="status open"><span class="dot"></span>Open</span>
+                    </div>
 
-      <div class="steps">
-        <div class="step">
-          <div class="step-num">01</div>
-          <div class="step-body">
-            <h3>Send in a request</h3>
-            <p>Tell us who you're honoring, which cemetery they rest in, and the date you'd like the flowers placed — a birthday, an anniversary, a holiday, or simply a day you're thinking of them.</p>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">02</div>
-          <div class="step-body">
-            <h3>Receive a phone consultation</h3>
-            <p>A member of our team calls to confirm the grave location, walk through flower and arrangement preferences, and answer any questions before anything is scheduled.</p>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">03</div>
-          <div class="step-body">
-            <h3>Flowers are arranged</h3>
-            <p>We work with local florists to prepare a fresh arrangement suited to the occasion, timed so the flowers arrive at their best on the day you've chosen.</p>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">04</div>
-          <div class="step-body">
-            <h3>Placement and photo confirmation</h3>
-            <p>We visit the headstone, place the arrangement with care, and take a photo on site — sent directly to you the same day, so you can see the moment for yourself.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+                    <div class="ledger-row">
+                        <span class="ledger-name">Ocean View Burial Park</span>
+                        <span class="ledger-locale">Burnaby, BC</span>
+                        <span class="ledger-lead">2–3 days</span>
+                        <span class="status open"><span class="dot"></span>Open</span>
+                    </div>
 
-  <section id="request" class="form-section">
-    <div class="wrap reveal">
-      <div class="section-head">
-        <p class="kicker">Request</p>
-        <h2 class="carved">Begin a placement</h2>
-        <p>Fill in the details below and we'll follow up by phone within one business day to confirm everything.</p>
-      </div>
+                    <div class="ledger-row">
+                        <span class="ledger-name">Mountain View Cemetery</span>
+                        <span class="ledger-locale">Vancouver, BC</span>
+                        <span class="ledger-lead">4–5 days</span>
+                        <span class="status limited"><span class="dot"></span>Limited capacity</span>
+                    </div>
 
-      <form id="requestForm" novalidate>
-        <div class="field">
-          <label for="name">Full name</label>
-          <input type="text" id="name" name="name" placeholder="Jane Doe" required>
-        </div>
-        <div class="field">
-          <label for="phone">Contact phone number</label>
-          <input type="tel" id="phone" name="phone" placeholder="(604) 555-0132" required>
-        </div>
-        <div class="field">
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" placeholder="jane@email.com" required>
-        </div>
-        <div class="field">
-          <label for="type">Type of request</label>
-          <select id="type" name="type" required>
-            <option value="" disabled selected>Select an occasion</option>
-            <option>Birthday</option>
-            <option>Anniversary</option>
-            <option>Holiday</option>
-            <option>Memorial or death anniversary</option>
-            <option>One-time visit</option>
-            <option>Recurring / standing order</option>
-            <option>Other</option>
-          </select>
-        </div>
-        <div class="field full">
-          <label for="date">Requested drop-off date</label>
-          <input type="date" id="date" name="date" required>
-        </div>
-        <div class="form-foot">
-          <button type="submit" class="btn">Send Request</button>
-          <p class="form-note">We'll never share your information. A member of our team will call you to confirm cemetery, location within the grounds, and any flower preferences.</p>
-        </div>
-      </form>
+                    <div class="ledger-row">
+                        <span class="ledger-name">Fraser Cemetery</span>
+                        <span class="ledger-locale">New Westminster, BC</span>
+                        <span class="ledger-lead">—</span>
+                        <span class="status soon"><span class="dot"></span>Opening soon</span>
+                    </div>
+                </div>
+                <p class="ledger-foot">Don't see your cemetery listed? Mention it in your request below — we're expanding across Metro Vancouver on a rolling basis.</p>
+            </div>
+        </section>
 
-      <div class="confirm" id="confirm">
-        <h3>Your request has been received.</h3>
-        <p>Thank you — we'll be in touch by phone shortly to confirm the details and arrange your consultation.</p>
-      </div>
-    </div>
-  </section>
+        <section id="process">
+            <div class="wrap reveal">
+                <div class="section-head">
+                    <h2 class="carved">A simple, guided process</h2>
+                    <p>From the moment you reach out to the moment you see the flowers in place, every step is handled with the same care we'd want shown at the graveside of our own family.</p>
+                </div>
 
-</main>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-num">01</div>
+                        <div class="step-body">
+                            <h3>Send in a request</h3>
+                            <p>Tell us who you're honoring, which cemetery they rest in, and the date you'd like the flowers placed — a birthday, an anniversary, a holiday, or simply a day you're thinking of them.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">02</div>
+                        <div class="step-body">
+                            <h3>Receive a phone consultation</h3>
+                            <p>A member of our team calls to confirm the grave location, walk through flower and arrangement preferences, and answer any questions before anything is scheduled.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">03</div>
+                        <div class="step-body">
+                            <h3>Flowers are arranged</h3>
+                            <p>We work with local florists to prepare a fresh arrangement suited to the occasion, timed so the flowers arrive at their best on the day you've chosen.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">04</div>
+                        <div class="step-body">
+                            <h3>Placement and photo confirmation</h3>
+                            <p>We visit the headstone, place the arrangement with care, and take a photo on site — sent directly to you the same day, so you can see the moment for yourself.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-<footer>
-  <a href="#top" class="wordmark"><img class="wordmark-logo" src="MF%20Logo.png" alt="" aria-hidden="true"> Memento Flori</a>
-  <p>Burnaby &amp; Vancouver, British Columbia</p>
-</footer>
+        <section id="request" class="form-section">
+            <div class="wrap reveal">
+                <div class="section-head">
+                    <h2 class="carved">Request a placement</h2>
+                    <p>Fill in the details below and we'll follow up by phone within one business day to confirm everything.</p>
+                </div>
 
-<script>
-  // intro quote, once per browser session
-  const introVeil = document.getElementById('introVeil');
-  if(!sessionStorage.getItem('mementoIntroSeen')){
-    introVeil.classList.add('show');
-    sessionStorage.setItem('mementoIntroSeen', 'true');
-    introVeil.addEventListener('animationend', function(e){
-      if(e.animationName === 'introDissolve'){
-        introVeil.remove();
-      }
-    });
-  } else {
-    introVeil.remove();
-  }
+                <form id="requestForm" novalidate>
+                    <div class="field">
+                        <label for="name">Full name</label>
+                        <input type="text" id="name" name="name" placeholder="Jane Doe" required>
+                    </div>
+                    <div class="field">
+                        <label for="phone">Contact phone number</label>
+                        <input type="tel" id="phone" name="phone" placeholder="(604) 555-0132" required>
+                    </div>
+                    <div class="field">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="jane@email.com" required>
+                    </div>
+                    <div class="field">
+                        <label for="type">Type of request</label>
+                        <select id="type" name="type" required>
+                            <option value="" disabled selected>Select an occasion</option>
+                            <option>Birthday</option>
+                            <option>Anniversary</option>
+                            <option>Holiday</option>
+                            <option>Memorial or death anniversary</option>
+                            <option>One-time visit</option>
+                            <option>Recurring / standing order</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <div class="field full">
+                        <label for="date">Requested drop-off date</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+                    <div class="form-foot">
+                        <button type="submit" class="btn">Send Request</button>
+                        <p class="form-note">We'll never share your information. A member of our team will call you to confirm cemetery, location within the grounds, and any flower preferences.</p>
+                    </div>
+                </form>
 
-  // scroll reveal
-  const revealEls = document.querySelectorAll('.reveal');
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-  }, { threshold: 0.12 });
-  revealEls.forEach(el => io.observe(el));
+                <div class="confirm" id="confirm">
+                    <h3>Your request has been received.</h3>
+                    <p>Thank you — we'll be in touch by phone shortly to confirm the details and arrange your consultation.</p>
+                </div>
+            </div>
+        </section>
 
-  // form handling (static demo — no backend)
-  const form = document.getElementById('requestForm');
-  const confirm = document.getElementById('confirm');
-  form.addEventListener('submit', function(e){
-    e.preventDefault();
-    if(!form.checkValidity()){ form.reportValidity(); return; }
-    form.style.display = 'none';
-    confirm.classList.add('show');
-    confirm.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  });
-</script>
+    </main>
+
+    <footer>
+        <a href="#top" class="wordmark"><img class="wordmark-logo" src="MF%20Logo.png" alt="" aria-hidden="true"> Memento Flori</a>
+        <p>Burnaby &amp; Vancouver, British Columbia</p>
+    </footer>
+
+    <script>// intro quote, once per browser session
+        const introVeil = document.getElementById('introVeil');
+        if (!sessionStorage.getItem('mementoIntroSeen')) {
+            introVeil.classList.add('show');
+            sessionStorage.setItem('mementoIntroSeen', 'true');
+            introVeil.addEventListener('animationend', function (e) {
+                if (e.animationName === 'introDissolve') {
+                    introVeil.remove();
+                }
+            });
+        } else {
+            introVeil.remove();
+        }
+
+        // scroll reveal
+        const revealEls = document.querySelectorAll('.reveal');
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+        }, { threshold: 0.12 });
+        revealEls.forEach(el => io.observe(el));
+
+        // form handling (static demo — no backend)
+        const form = document.getElementById('requestForm');
+        const confirm = document.getElementById('confirm');
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (!form.checkValidity()) { form.reportValidity(); return; }
+            form.style.display = 'none';
+            confirm.classList.add('show');
+            confirm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });</script>
 
 </body>
 </html>
